@@ -11,38 +11,88 @@ struct ContentView: View {
     
     @State private var character: Character? = nil
     @State private var viewModel = ViewModel()
+    @State private var searchReq = ""
+    
+    @State var statusFilter: Status = .none
+    @State var genderFilter: Gender = .none
+    
+    @State var showFilterView = false
 
     var body: some View {
         NavigationSplitView {
             
-            ScrollView{
-                
-                VStack(spacing: 0){
-                    
-
-                    ForEach(viewModel.characterArr, id: \.id) { character in
-                        NavigationLink {
-                            DetailView(character: character)
-                        } label: {
-                            CharacterRow(character: character)
-                        }
+            VStack {
+                HStack {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .padding(.leading)
+                        TextField("Search", text: $searchReq)
+                    }
+                    .frame(height: 50)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(.gray.opacity(0.5), lineWidth: 2)
+                        
+                    }
+                    .padding(.horizontal)
+                    Button{
+                        showFilterView = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.title)
+                            .padding(.trailing)
+                            .padding(.leading, 3)
+                            .foregroundStyle(.white)
                     }
                 }
+                ScrollView{
+                    VStack(spacing: 0){
+                        ForEach(viewModel.characterArr, id: \.id) { character in
+                            NavigationLink {
+                                DetailView(character: character)
+                            } label: {
+                                CharacterRow(character: character)
+                            }
+                            .padding(.top, -5)
+                        }
+                    }
+                    .padding()
+                }
+                .navigationTitle("Rick & Morty Characters")
+                .navigationBarTitleDisplayMode(.inline)
+                .onAppear{
+                    
+                    viewModel.fetchData()
             }
-            .navigationTitle("Rick & Morty Characters")
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear{
-                
-                viewModel.fetchData()
             }
             
         } detail: {
             WelcomeView()
         }
         .preferredColorScheme(.dark)
+        .sheet(isPresented: $showFilterView, content: {
+            FilterView(statusFilter: $statusFilter, genderFilter: $genderFilter)
+                .presentationDetents([.medium])
+        })
+        
     }
 }
 
 #Preview {
     ContentView()
+}
+
+enum Gender: String, CaseIterable {
+    case male = "Male"
+    case female = "Female"
+    case genderless = "Genderless"
+    case unknown = "unknown"
+    case none = "None"
+}
+
+enum Status: String, CaseIterable {
+    case dead = "Dead"
+    case alive = "Alive"
+    case unknown = "unknown"
+    case none = "None"
 }
