@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var character: Character? = nil
+    @State private var viewModel = ViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationSplitView {
+            
+            ScrollView{
+                
+                VStack(spacing: 0){
+                    ForEach(viewModel.characterArr, id: \.id) { character in
+                        CharacterRow(character: character)
+                    }
+                }
+            }
+            .navigationTitle("Rick & Morty Characters")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear{
+                viewModel.fetchData()
+            }
+            
+        } detail: {
+            WelcomeView()
         }
-        .padding()
     }
 }
 
