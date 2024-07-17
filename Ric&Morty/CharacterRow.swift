@@ -41,7 +41,7 @@ struct CharacterRow: View {
                         
                         HStack(){
                             Text(character.status)
-                                .foregroundStyle(character.status == "Alive" ? .green : .red)
+                                .foregroundStyle(character.statusColor)
                                 .fontWeight(.bold)
                             
                             +
@@ -76,4 +76,7 @@ struct CharacterRow: View {
 
 extension Color {
     static let grayCustom = Color(#colorLiteral(red: 0.08342342824, green: 0.08361873776, blue: 0.08949685842, alpha: 1))
+    static let greenCustom = Color(#colorLiteral(red: 0.1007835194, green: 0.5291658044, blue: 0.2169768214, alpha: 1))
+    static let redCustom = Color(#colorLiteral(red: 0.8400415182, green: 0.1365679801, blue: 0.0008404203691, alpha: 1))
+    
 }

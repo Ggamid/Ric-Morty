@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Results: Codable {
     let results: [Character]
@@ -24,6 +25,29 @@ struct Character: Codable, Identifiable {
     let episode: [String]
     let url: String
     let created: String
+    
+    var statusColor: Color {
+        switch self.status {
+        case "Alive":
+            Color.greenCustom
+        case "Dead":
+            Color.redCustom
+        case "unknown":
+            Color.gray
+        default:
+            Color.black
+        }
+    }
+    
+    
+    var displayingEpisodes: Set<String> {
+        var seOfEpisodes = Set<String>()
+        let epi = episode.compactMap { $0.last.map { String($0) } }
+        for ep in epi {
+            seOfEpisodes.insert(ep)
+        }
+        return seOfEpisodes
+    }
     
     static let example = Character(
             id: 183,

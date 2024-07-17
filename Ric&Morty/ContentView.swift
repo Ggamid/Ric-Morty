@@ -18,20 +18,28 @@ struct ContentView: View {
             ScrollView{
                 
                 VStack(spacing: 0){
+                    
+
                     ForEach(viewModel.characterArr, id: \.id) { character in
-                        CharacterRow(character: character)
+                        NavigationLink {
+                            DetailView(character: character)
+                        } label: {
+                            CharacterRow(character: character)
+                        }
                     }
                 }
             }
             .navigationTitle("Rick & Morty Characters")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear{
+                
                 viewModel.fetchData()
             }
             
         } detail: {
             WelcomeView()
         }
+        .preferredColorScheme(.dark)
     }
 }
 

@@ -19,12 +19,6 @@ extension ContentView {
         
         
         func fetchData(){
-//            var components = URLComponents()
-//            components.scheme = "https"
-//            components.host = "rickandmortyapi.com"
-//            components.path = "api/character/"
-//            components.queryItems = [
-//            URLQueryItem(name: "page", value: "1")]
             
             let url = URL(string: "https://rickandmortyapi.com/api/character/")!
                 
@@ -44,6 +38,7 @@ extension ContentView {
                 if let data = data {
                     do {
                         let characters = try JSONDecoder().decode(Results.self, from: data)
+                        self.characterArr = []
                         for character in characters.results {
                             self.characterArr.append(character)
                         }
