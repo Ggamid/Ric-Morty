@@ -45,6 +45,36 @@ struct ContentView: View {
                             .foregroundStyle(.white)
                     }
                 }
+                HStack{
+                    if statusFilter != .none {
+                        Text(statusFilter.rawValue)
+                            .filterMod(textColor: .black, backgroundColor: .white)
+
+                    }
+                    
+                    if genderFilter != .none {
+                        Text(genderFilter.rawValue)
+                            .filterMod(textColor: .black, backgroundColor: .white)
+
+                    }
+                    
+                    if genderFilter != .none || statusFilter != .none {
+                        Button{
+                            withAnimation {
+                                genderFilter = .none
+                                statusFilter = .none
+                            }
+
+                        } label: {
+                            Text("Reset all filters")
+                                .filterMod(textColor: .white, backgroundColor: .blue)
+                        }
+                        Spacer()
+                    }
+                    
+                }
+                .padding(.top)
+                .padding(.leading)
                 ScrollView{
                     VStack(spacing: 0){
                         ForEach(viewModel.characterArr, id: \.id) { character in
@@ -95,4 +125,24 @@ enum Status: String, CaseIterable {
     case alive = "Alive"
     case unknown = "unknown"
     case none = "None"
+}
+
+struct FilterMod: ViewModifier {
+    var textColor: Color
+    var backgroundColor: Color
+    func body(content: Content) -> some View {
+        content
+            .font(.caption)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .foregroundStyle(textColor)
+            .background(backgroundColor)
+            .clipShape(.rect(cornerRadius: 20))
+    }
+}
+
+extension View {
+    func filterMod(textColor: Color, backgroundColor: Color) -> some View{
+        modifier(FilterMod(textColor: textColor, backgroundColor: backgroundColor))
+    }
 }

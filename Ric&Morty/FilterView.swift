@@ -28,9 +28,19 @@ struct FilterView: View {
                     .font(.largeTitle)
                     .bold()
                 Spacer()
-                Text("Reset")
-                    .font(.title2)
-                    .padding(.trailing)
+                
+                Button{
+                    statusFilter = .none
+                    genderFilter = .none
+                    dismiss()
+                } label: {
+                    Text("Reset")
+                        .font(.title2)
+                        .padding(.trailing)
+                }
+                .foregroundStyle(.white)
+                
+                
             }
             Text("Status")
                 .padding()
@@ -56,7 +66,7 @@ struct FilterView: View {
                             .clipShape(.rect(cornerRadius: 20))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(.gray, lineWidth: 2)
+                                    .stroke(temporaryStatus == status ? .white : .gray, lineWidth: 2)
                             }
                         }
                         .padding(.vertical, 5)
@@ -90,7 +100,7 @@ struct FilterView: View {
                             .clipShape(.rect(cornerRadius: 20))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(.gray, lineWidth: 2)
+                                    .stroke(temporaryGender == gender ? .white : .gray, lineWidth: 2)
                             }
                         }
                         .padding(.vertical, 5)
