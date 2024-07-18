@@ -27,6 +27,7 @@ struct FilterView: View {
                         .font(.largeTitle)
                         .padding(.leading)
                 }
+                .foregroundStyle(.white)
                 Spacer()
                 Text("Filters")
                     .font(.largeTitle)
@@ -131,10 +132,11 @@ struct FilterView: View {
             .padding()
             Spacer()
         }.preferredColorScheme(.dark)
-            .onAppear{
-                temporaryGender = genderFilter
-                temporaryStatus = statusFilter
-            }
+        .onAppear{
+            temporaryGender = genderFilter
+            temporaryStatus = statusFilter
+        }
+        .padding(.top)
     }
     
 }

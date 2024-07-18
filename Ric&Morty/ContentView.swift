@@ -99,16 +99,20 @@ struct ContentView: View {
                 .padding(.leading)
                 ScrollView{
                     LazyVStack(spacing: 0){
-                        ForEach(filteredCharacterList, id: \.id) { character in
-                            NavigationLink {
-                                DetailView(character: character)
-                            } label: {
-                                CharacterRow(character: character)
+                        if !filteredCharacterList.isEmpty{
+                            ForEach(filteredCharacterList, id: \.id) { character in
+                                NavigationLink {
+                                    DetailView(character: character)
+                                } label: {
+                                    CharacterRow(character: character)
+                                }
+                                .padding(.top, -5)
+                                .onAppear{
+                                    viewModel.loadMore(id: character.id)
+                                }
                             }
-                            .padding(.top, -5)
-                            .onAppear{
-                                viewModel.loadMore(id: character.id)
-                            }
+                        } else {
+                            NothinFoundView()
                         }
                         if viewModel.isLoading {
                             ProgressView()

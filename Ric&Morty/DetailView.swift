@@ -20,10 +20,11 @@ struct DetailView: View {
                         .clipShape(.rect(cornerRadius: 20))
                         .padding()
                 } placeholder: {
+                    
                     ProgressView()
+                        .frame(height: 300)
                 }
-                .frame(height: 400)
-                .frame(maxWidth: .infinity)
+
                 
                 Text(character.status)
                     .fontWeight(.bold)
@@ -47,10 +48,10 @@ struct DetailView: View {
                 }
                 Spacer()
             }
-            .frame(maxWidth: .infinity)
             .navigationTitle(character.name)
             .background(Color.grayCustom)
             .clipShape(.rect(cornerRadius: 20))
+            .padding(.horizontal)
             
             Spacer()
         }
