@@ -28,6 +28,7 @@ struct CharacterRow: View {
                             .clipShape(.rect(cornerRadius: 20))
                     } placeholder: {
                         ProgressView()
+                            .frame(width: 140)
                     }
                     .padding(.leading)
                     .padding(.trailing, 5)
@@ -38,6 +39,7 @@ struct CharacterRow: View {
                             .font(.title)
                             .fontWeight(.medium)
                             .padding(.top)
+                            .truncationMode(.tail)
                         
                         HStack(){
                             Text(character.status)

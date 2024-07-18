@@ -15,17 +15,22 @@ extension ContentView {
         
         init() {
             self.characterArr = []
+            self.fetchData()
         }
+        
+        var page = 1
+        let totalPage = 41
+        var isLoading = false
         
         
         func fetchData(){
             
-            let url = URL(string: "https://rickandmortyapi.com/api/character/")!
+            guard let url = URL(string: "https://rickandmortyapi.com/api/character/") else { fatalError("wrong url") }
                 
             // Добавляем параметр запроса 'page' для получения первой страницы
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+            guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { fatalError("wrong URL Components") }
             components.queryItems = [
-                URLQueryItem(name: "page", value: "1")
+                URLQueryItem(name: "page", value: String(page))
             ]
             
             
@@ -38,7 +43,6 @@ extension ContentView {
                 if let data = data {
                     do {
                         let characters = try JSONDecoder().decode(Results.self, from: data)
-                        self.characterArr = []
                         for character in characters.results {
                             self.characterArr.append(character)
                         }
@@ -48,7 +52,15 @@ extension ContentView {
                 }
             }
             task.resume()
-
+            self.page+=1
+        }
+        
+        func loadMore(id: Int) {
+            if let lastChar = characterArr.last, lastChar.id == id {
+                isLoading = true
+                fetchData()
+                isLoading = false
+            }
         }
     }
 }

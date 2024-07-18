@@ -19,16 +19,25 @@ struct ContentView: View {
     @State var showFilterView = false
     
     var filteredCharacterList: [Character] {
-        if genderFilter != .none && statusFilter != .none {
-            return viewModel.characterArr.filter { $0.gender == genderFilter.rawValue && $0.status == statusFilter.rawValue
+        var resArr = [Character]()
+        if genderFilter != .none && statusFilter != .none && !searchReq.isEmpty {
+            resArr = viewModel.characterArr.filter { $0.gender == genderFilter.rawValue && $0.status == statusFilter.rawValue && $0.name.localizedStandardContains(searchReq)
             }
+        } else if genderFilter != .none && statusFilter != .none {
+            resArr = viewModel.characterArr.filter { $0.gender == genderFilter.rawValue && $0.status == statusFilter.rawValue }
         } else if genderFilter != .none {
-            return viewModel.characterArr.filter { $0.gender == genderFilter.rawValue }
+            resArr = viewModel.characterArr.filter { $0.gender == genderFilter.rawValue }
         } else if statusFilter != .none {
-            return viewModel.characterArr.filter { $0.status == statusFilter.rawValue }
+            resArr = viewModel.characterArr.filter { $0.status == statusFilter.rawValue }
+        } else if !searchReq.isEmpty{
+            resArr = viewModel.characterArr.filter{ $0.name.localizedStandardContains(searchReq) }
         } else {
-            return viewModel.characterArr
+            resArr = viewModel.characterArr
         }
+        
+        
+        
+        return resArr
     }
 
     var body: some View {
@@ -89,7 +98,7 @@ struct ContentView: View {
                 .padding(.top)
                 .padding(.leading)
                 ScrollView{
-                    VStack(spacing: 0){
+                    LazyVStack(spacing: 0){
                         ForEach(filteredCharacterList, id: \.id) { character in
                             NavigationLink {
                                 DetailView(character: character)
@@ -97,16 +106,23 @@ struct ContentView: View {
                                 CharacterRow(character: character)
                             }
                             .padding(.top, -5)
+                            .onAppear{
+                                viewModel.loadMore(id: character.id)
+                            }
+                        }
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .frame(height: 50)
                         }
                     }
+                    .scrollTargetLayout()
                     .padding()
+                    
                 }
                 .navigationTitle("Rick & Morty Characters")
                 .navigationBarTitleDisplayMode(.inline)
-                .onAppear{
-                    
-                    viewModel.fetchData()
-            }
+                
+            
             }
             
         } detail: {
@@ -115,7 +131,7 @@ struct ContentView: View {
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showFilterView, content: {
             FilterView(statusFilter: $statusFilter, genderFilter: $genderFilter)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(400)])
         })
         
     }

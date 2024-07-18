@@ -20,9 +20,13 @@ struct FilterView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment: .center){
-                Image(systemName: "multiply")
-                    .font(.largeTitle)
-                    .padding(.leading)
+                Button{
+                    dismiss()
+                } label: {
+                    Image(systemName: "multiply")
+                        .font(.largeTitle)
+                        .padding(.leading)
+                }
                 Spacer()
                 Text("Filters")
                     .font(.largeTitle)
@@ -125,7 +129,7 @@ struct FilterView: View {
                     .bold()
             }
             .padding()
-            
+            Spacer()
         }.preferredColorScheme(.dark)
             .onAppear{
                 temporaryGender = genderFilter
