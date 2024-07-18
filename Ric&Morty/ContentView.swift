@@ -17,6 +17,19 @@ struct ContentView: View {
     @State var genderFilter: Gender = .none
     
     @State var showFilterView = false
+    
+    var filteredCharacterList: [Character] {
+        if genderFilter != .none && statusFilter != .none {
+            return viewModel.characterArr.filter { $0.gender == genderFilter.rawValue && $0.status == statusFilter.rawValue
+            }
+        } else if genderFilter != .none {
+            return viewModel.characterArr.filter { $0.gender == genderFilter.rawValue }
+        } else if statusFilter != .none {
+            return viewModel.characterArr.filter { $0.status == statusFilter.rawValue }
+        } else {
+            return viewModel.characterArr
+        }
+    }
 
     var body: some View {
         NavigationSplitView {
@@ -77,7 +90,7 @@ struct ContentView: View {
                 .padding(.leading)
                 ScrollView{
                     VStack(spacing: 0){
-                        ForEach(viewModel.characterArr, id: \.id) { character in
+                        ForEach(filteredCharacterList, id: \.id) { character in
                             NavigationLink {
                                 DetailView(character: character)
                             } label: {
