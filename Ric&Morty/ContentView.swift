@@ -42,91 +42,86 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            
-            VStack {
-                HStack {
+            ZStack{
+                VStack {
+                    Text("Rick & Morty Characters")
+                        .font(.title)
+                        .bold()
                     HStack {
-                        Image(systemName: "magnifyingglass")
-                            .padding(.leading)
-                        TextField("Search", text: $searchReq)
-                    }
-                    .frame(height: 50)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(.gray.opacity(0.5), lineWidth: 2)
-                        
-                    }
-                    .padding(.horizontal)
-                    Button{
-                        showFilterView = true
-                    } label: {
-                        Image(systemName: "slider.horizontal.3")
-                            .font(.title)
-                            .padding(.trailing)
-                            .padding(.leading, 3)
-                            .foregroundStyle(.white)
-                    }
-                }
-                HStack{
-                    if statusFilter != .none {
-                        Text(statusFilter.rawValue)
-                            .filterMod(textColor: .black, backgroundColor: .white)
-
-                    }
-                    
-                    if genderFilter != .none {
-                        Text(genderFilter.rawValue)
-                            .filterMod(textColor: .black, backgroundColor: .white)
-
-                    }
-                    
-                    if genderFilter != .none || statusFilter != .none {
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .padding(.leading)
+                            TextField("Search", text: $searchReq)
+                        }
+                        .frame(height: 50)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(.gray.opacity(0.5), lineWidth: 2)
+                        }
+                        .padding(.horizontal)
                         Button{
-                            withAnimation {
-                                genderFilter = .none
-                                statusFilter = .none
-                            }
-
+                            showFilterView = true
                         } label: {
-                            Text("Reset all filters")
-                                .filterMod(textColor: .white, backgroundColor: .blue)
+                            Image(systemName: "slider.horizontal.3")
+                                .font(.title)
+                                .padding(.trailing)
+                                .padding(.leading, 3)
+                                .foregroundStyle(.white)
                         }
-                        Spacer()
                     }
-                    
-                }
-                .padding(.top)
-                .padding(.leading)
-                ScrollView{
-                    LazyVStack(spacing: 0){
-                        if !filteredCharacterList.isEmpty{
-                            ForEach(filteredCharacterList, id: \.id) { character in
-                                NavigationLink {
-                                    DetailView(character: character)
-                                } label: {
-                                    CharacterRow(character: character)
+                    HStack{
+                        if statusFilter != .none {
+                            Text(statusFilter.rawValue)
+                                .filterMod(textColor: .black, backgroundColor: .white)
+                        }
+                        
+                        if genderFilter != .none {
+                            Text(genderFilter.rawValue)
+                                .filterMod(textColor: .black, backgroundColor: .white)
+                        }
+                        
+                        if genderFilter != .none || statusFilter != .none {
+                            Button{
+                                withAnimation {
+                                    genderFilter = .none
+                                    statusFilter = .none
                                 }
-                                .padding(.top, -5)
-                                .onAppear{
-                                    viewModel.loadMore(id: character.id)
-                                }
+                            } label: {
+                                Text("Reset all filters")
+                                    .filterMod(textColor: .white, backgroundColor: .blue)
                             }
-                        } else {
-                            NothinFoundView()
-                        }
-                        if viewModel.isLoading {
-                            ProgressView()
-                                .frame(height: 50)
+                            Spacer()
                         }
                     }
-                    .scrollTargetLayout()
-                    .padding()
-                    
+                    .padding(.top)
+                    .padding(.leading)
+                    ScrollView{
+                        LazyVStack(spacing: 0){
+                            if !filteredCharacterList.isEmpty{
+                                ForEach(filteredCharacterList, id: \.id) { character in
+                                    NavigationLink {
+                                        DetailView(character: character)
+                                    } label: {
+                                        CharacterRow(character: character)
+                                    }
+                                    .padding(.top, -5)
+                                    .onAppear{
+                                        viewModel.loadMore(id: character.id)
+                                    }
+                                }
+                            } else {
+                                NothinFoundView()
+                            }
+                        }
+                        .scrollTargetLayout()
+                        .padding()
+                    }
+                    .navigationBarTitleDisplayMode(.inline)
                 }
-                .navigationTitle("Rick & Morty Characters")
-                .navigationBarTitleDisplayMode(.inline)
                 
-            
+                if !viewModel.isLoadingScreenShowed {
+                    LoadingView()
+                }
             }
             
         } detail: {
@@ -136,6 +131,11 @@ struct ContentView: View {
         .sheet(isPresented: $showFilterView, content: {
             FilterView(statusFilter: $statusFilter, genderFilter: $genderFilter)
                 .presentationDetents([.height(400)])
+        })
+        .onAppear(perform: {
+            withAnimation {
+                viewModel.showLoadingScreen()
+            }
         })
         
     }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Network
 
 extension ContentView {
     @Observable
@@ -20,11 +21,10 @@ extension ContentView {
         
         var page = 1
         let totalPage = 41
-        var isLoading = false
+        var isLoadingScreenShowed = false
         
         
         func fetchData(){
-            
             guard let url = URL(string: "https://rickandmortyapi.com/api/character/") else { fatalError("wrong url") }
                 
             // Добавляем параметр запроса 'page' для получения первой страницы
@@ -50,6 +50,7 @@ extension ContentView {
                         print("Error decoding JSON: \(error)")
                     }
                 }
+                
             }
             task.resume()
             self.page+=1
@@ -57,9 +58,13 @@ extension ContentView {
         
         func loadMore(id: Int) {
             if let lastChar = characterArr.last, lastChar.id == id {
-                isLoading = true
                 fetchData()
-                isLoading = false
+            }
+        }
+        
+        func showLoadingScreen() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.isLoadingScreenShowed = true
             }
         }
     }

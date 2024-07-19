@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8768CD312C4AD86A00F61699 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8768CD302C4AD86A00F61699 /* LoadingView.swift */; };
 		877861E62C49884F003037DE /* NothinFoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877861E52C49884F003037DE /* NothinFoundView.swift */; };
 		87AAD9D32C47E38700086FE3 /* Ric_MortyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAD9D22C47E38700086FE3 /* Ric_MortyApp.swift */; };
 		87AAD9D52C47E38700086FE3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAD9D42C47E38700086FE3 /* ContentView.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8768CD302C4AD86A00F61699 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		877861E52C49884F003037DE /* NothinFoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NothinFoundView.swift; sourceTree = "<group>"; };
 		87AAD9CF2C47E38700086FE3 /* Ric&Morty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ric&Morty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87AAD9D22C47E38700086FE3 /* Ric_MortyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ric_MortyApp.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 			children = (
 				87AAD9D22C47E38700086FE3 /* Ric_MortyApp.swift */,
 				87AAD9D42C47E38700086FE3 /* ContentView.swift */,
+				8768CD302C4AD86A00F61699 /* LoadingView.swift */,
 				87AAD9EA2C48248900086FE3 /* FilterView.swift */,
 				87AAD9E82C4808FF00086FE3 /* DetailView.swift */,
 				87AAD9E62C47F21500086FE3 /* ContentView-ViewModel.swift */,
@@ -161,6 +164,7 @@
 				87AAD9E52C47F0F700086FE3 /* WelcomeView.swift in Sources */,
 				87AAD9E72C47F21500086FE3 /* ContentView-ViewModel.swift in Sources */,
 				87AAD9E12C47E5B200086FE3 /* Character.swift in Sources */,
+				8768CD312C4AD86A00F61699 /* LoadingView.swift in Sources */,
 				87AAD9E92C4808FF00086FE3 /* DetailView.swift in Sources */,
 				87AAD9EB2C48248900086FE3 /* FilterView.swift in Sources */,
 				877861E62C49884F003037DE /* NothinFoundView.swift in Sources */,
