@@ -9,36 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var character: Character? = nil
     @State private var viewModel = ViewModel()
-    @State private var searchReq = ""
     
-    @State var statusFilter: Status = .none
-    @State var genderFilter: Gender = .none
+
     
     @State var showFilterView = false
     
     @StateObject var network = NetworkMonitor()
     
-    var filteredCharacterList: [Character] {
-        var resArr = [Character]()
-        if genderFilter != .none && statusFilter != .none && !searchReq.isEmpty {
-            resArr = viewModel.characterArr.filter { $0.gender == genderFilter.rawValue && $0.status == statusFilter.rawValue && $0.name.localizedStandardContains(searchReq)
-            }
-        } else if genderFilter != .none && statusFilter != .none {
-            resArr = viewModel.characterArr.filter { $0.gender == genderFilter.rawValue && $0.status == statusFilter.rawValue }
-        } else if genderFilter != .none {
-            resArr = viewModel.characterArr.filter { $0.gender == genderFilter.rawValue }
-        } else if statusFilter != .none {
-            resArr = viewModel.characterArr.filter { $0.status == statusFilter.rawValue }
-        } else if !searchReq.isEmpty{
-            resArr = viewModel.characterArr.filter{ $0.name.localizedStandardContains(searchReq) }
-        } else {
-            resArr = viewModel.characterArr
-        }
 
-        return resArr
-    }
 
     var body: some View {
         NavigationSplitView {
@@ -52,7 +31,8 @@ struct ContentView: View {
                         HStack {
                             Image(systemName: "magnifyingglass")
                                 .padding(.leading)
-                            TextField("Search", text: $searchReq)
+                                .foregroundStyle(.gray)
+                            TextField("Search", text: $viewModel.searchReq)
                         }
                         .frame(height: 50)
                         .overlay {
@@ -67,29 +47,30 @@ struct ContentView: View {
                                 .font(.title)
                                 .padding(.trailing)
                                 .padding(.leading, 3)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.cyan)
+                                
                         }
                     }
                     HStack{
-                        if statusFilter != .none {
-                            Text(statusFilter.rawValue)
+                        if viewModel.statusFilter != .none {
+                            Text(viewModel.statusFilter.rawValue)
                                 .filterMod(textColor: .black, backgroundColor: .white)
                         }
                         
-                        if genderFilter != .none {
-                            Text(genderFilter.rawValue)
+                        if viewModel.genderFilter != .none {
+                            Text(viewModel.genderFilter.rawValue)
                                 .filterMod(textColor: .black, backgroundColor: .white)
                         }
                         
-                        if genderFilter != .none || statusFilter != .none {
+                        if viewModel.genderFilter != .none || viewModel.statusFilter != .none {
                             Button{
                                 withAnimation {
-                                    genderFilter = .none
-                                    statusFilter = .none
+                                    viewModel.genderFilter = .none
+                                    viewModel.statusFilter = .none
                                 }
                             } label: {
                                 Text("Reset all filters")
-                                    .filterMod(textColor: .white, backgroundColor: .blue)
+                                    .filterMod(textColor: .white, backgroundColor: .cyan)
                             }
                             Spacer()
                         }
@@ -99,8 +80,8 @@ struct ContentView: View {
                     
                     ScrollView{
                         LazyVStack(spacing: 0){
-                            if !filteredCharacterList.isEmpty{
-                                ForEach(filteredCharacterList, id: \.id) { character in
+                            if !viewModel.filteredCharacterList.isEmpty{
+                                ForEach(viewModel.filteredCharacterList, id: \.id) { character in
                                     NavigationLink {
                                         DetailView(character: character)
                                     } label: {
@@ -135,7 +116,7 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showFilterView, content: {
-            FilterView(statusFilter: $statusFilter, genderFilter: $genderFilter)
+            FilterView(statusFilter: $viewModel.statusFilter, genderFilter: $viewModel.genderFilter)
                 .presentationDetents([.height(400)])
         })
         .onAppear(perform: {

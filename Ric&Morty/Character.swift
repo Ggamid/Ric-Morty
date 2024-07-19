@@ -72,7 +72,6 @@ struct Character: Codable, Identifiable {
     
 }
 
-// Модель данных
 struct Origin: Codable {
     let name: String
     let url: String
