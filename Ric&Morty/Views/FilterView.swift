@@ -11,9 +11,11 @@ struct FilterView: View {
     
     @Binding var statusFilter: Status
     @Binding var genderFilter: Gender
+    @Binding var favoriteFilter: Bool
     
     @State private var temporaryStatus: Status = .none
     @State private var temporaryGender: Gender = .none
+    @State private var temporaryfavoriteFilter: Bool = false
     
     @Environment(\.dismiss) var dismiss
     
@@ -113,12 +115,39 @@ struct FilterView: View {
                             
                     }
                 }
+                Text("Favorite")
+                    .padding()
+                    .fontWeight(.medium)
+                Button{
+                    temporaryfavoriteFilter.toggle()
+                }label: {
+                    HStack{
+                        Text("favorite")
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                        
+                        if temporaryfavoriteFilter == true {
+                            Image(systemName: "checkmark")
+                                .padding(.trailing)
+                        }
+                    }
+                    .foregroundStyle(temporaryfavoriteFilter ? .black : .white)
+                    .background(temporaryfavoriteFilter ? .white : .clear)
+                    .clipShape(.rect(cornerRadius: 20))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(temporaryfavoriteFilter ? .white : .gray, lineWidth: 2)
+                    }
+                }
+                .padding(.vertical, 5)
+                .foregroundStyle(.white)
             }
             .padding(.leading)
             
             Button{
                 statusFilter = temporaryStatus
                 genderFilter = temporaryGender
+                favoriteFilter = temporaryfavoriteFilter
                 dismiss()
             } label: {
                 Text("Apply")
@@ -135,6 +164,7 @@ struct FilterView: View {
         .onAppear{
             temporaryGender = genderFilter
             temporaryStatus = statusFilter
+            temporaryfavoriteFilter = favoriteFilter
         }
         .padding(.top)
     }
@@ -142,5 +172,5 @@ struct FilterView: View {
 }
 
 #Preview {
-    FilterView(statusFilter: .constant(.alive), genderFilter: .constant(.female))
+    FilterView(statusFilter: .constant(.alive), genderFilter: .constant(.female), favoriteFilter: .constant(false))
 }

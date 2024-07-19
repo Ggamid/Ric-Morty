@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CharacterRow: View {
     
     let character: Character
+    @Query var favoritesList: [Favorites]
+    @Environment(\.modelContext) var modelContext
+    var isFavorite: Bool {
+        Favorites.isContained(id: character.id, list: favoritesList)
+    }
     
     var body: some View {
         VStack {
@@ -65,10 +71,36 @@ struct CharacterRow: View {
 
                 }
                 .frame(height: 100)
+                
+                
+            }
+            .overlay{
+                VStack{
+                    Spacer()
+                    HStack{
+                        Spacer()
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .font(.title)
+                            .foregroundStyle(.cyan)
+                            .padding()
+                            .onTapGesture {
+                                if !isFavorite {
+                                    modelContext.insert(Favorites(id: character.id))
+                                } else {
+                                    let fav = Favorites.findFav(id: character.id, list: favoritesList)
+                                    if fav != -1 {
+                                        modelContext.delete(favoritesList[fav])
+                                    }
+                                }
+                            }
+                    }
+                }
             }
         }
         .frame(height: 150)
     }
+    
+
 }
 
 #Preview {

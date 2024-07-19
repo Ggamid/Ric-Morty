@@ -116,7 +116,7 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showFilterView, content: {
-            FilterView(statusFilter: $viewModel.statusFilter, genderFilter: $viewModel.genderFilter)
+            FilterView(statusFilter: $viewModel.statusFilter, genderFilter: $viewModel.genderFilter, favoriteFilter: $viewModel.filterByFavorite)
                 .presentationDetents([.height(400)])
         })
         .onAppear(perform: {
