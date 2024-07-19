@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Network
 
 extension ContentView {
     @Observable

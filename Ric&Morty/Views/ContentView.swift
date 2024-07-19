@@ -18,6 +18,8 @@ struct ContentView: View {
     
     @State var showFilterView = false
     
+    @StateObject var network = NetworkMonitor()
+    
     var filteredCharacterList: [Character] {
         var resArr = [Character]()
         if genderFilter != .none && statusFilter != .none && !searchReq.isEmpty {
@@ -34,9 +36,7 @@ struct ContentView: View {
         } else {
             resArr = viewModel.characterArr
         }
-        
-        
-        
+
         return resArr
     }
 
@@ -47,6 +47,7 @@ struct ContentView: View {
                     Text("Rick & Morty Characters")
                         .font(.title)
                         .bold()
+                        .padding(.top)
                     HStack {
                         HStack {
                             Image(systemName: "magnifyingglass")
@@ -95,6 +96,7 @@ struct ContentView: View {
                     }
                     .padding(.top)
                     .padding(.leading)
+                    
                     ScrollView{
                         LazyVStack(spacing: 0){
                             if !filteredCharacterList.isEmpty{
@@ -117,6 +119,10 @@ struct ContentView: View {
                         .padding()
                     }
                     .navigationBarTitleDisplayMode(.inline)
+                }
+                
+                if !network.isConnected {
+                    NetworkErrorView(task: viewModel.fetchData )
                 }
                 
                 if !viewModel.isLoadingScreenShowed {
