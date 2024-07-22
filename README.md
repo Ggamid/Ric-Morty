@@ -20,3 +20,4 @@
   - Поиск и фильтрация персонажей.
 
 #TestProject
+![Rick Morty](https://github.com/user-attachments/assets/e438dd7a-cfef-454f-8411-e939ec469ffc)
